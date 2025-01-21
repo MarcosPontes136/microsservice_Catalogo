@@ -29,7 +29,7 @@ public class CatalogoDTO {
 	private String description;
 	
 	@NotBlank
-	private String image;
+	private byte[] image;
 	
 	
 	public UUID id() {

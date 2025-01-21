@@ -35,11 +35,8 @@ public class CatalogoService {
 			catalogoDTO.setDiscount(catalogoModel.getDiscount());
 			catalogoDTO.setName(catalogoModel.getName());
  			catalogoDTO.setDescription(catalogoModel.getDescription());
-			
-			String imageBytes = convertByteArrayToBase64(catalogoModel.getImage());
-			
-			catalogoDTO.setImage(imageBytes);
-			
+	 		catalogoDTO.setImage(catalogoModel.getImage());
+	 		
 		} catch (Exception e) {
 			logger.info("Erro ao enviar Produto! {}");
 			throw e;
@@ -64,12 +61,8 @@ public class CatalogoService {
         			catalogoDTO.setDiscount(catalogoModel.getDiscount());
         			catalogoDTO.setName(catalogoModel.getName());
         			catalogoDTO.setDescription(catalogoModel.getDescription());
-
-                    if (catalogoModel.getImage() != null && catalogoModel.getImage().length > 0) {
-                        String base64Image = convertByteArrayToBase64(catalogoModel.getImage());
-                        catalogoDTO.setImage(base64Image);
-                    }
-
+        			catalogoDTO.setImage(catalogoModel.getImage());
+        			
                     return catalogoDTO;
                 })
                 .collect(Collectors.toList()); 
@@ -77,10 +70,5 @@ public class CatalogoService {
     
     public List<CatalogoModel> searchProduct(String name, Double price) throws UnsupportedEncodingException {	
 		return catalogoRepository.findByFilters(name, price);
-    }
-    
-    
-    public String convertByteArrayToBase64(byte[] imageBytes) {
-    	return Base64.getEncoder().encodeToString(imageBytes);
     }
 }
