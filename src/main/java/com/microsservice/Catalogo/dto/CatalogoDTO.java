@@ -2,6 +2,8 @@ package com.microsservice.Catalogo.dto;
 
 import java.util.UUID;
 
+import com.microsservice.Catalogo.models.CatalogoModel;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
