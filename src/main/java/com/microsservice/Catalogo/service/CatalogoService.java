@@ -2,13 +2,11 @@ package com.microsservice.Catalogo.service;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.microsservice.Catalogo.dto.CatalogoDTO;
@@ -19,46 +17,43 @@ import com.microsservice.Catalogo.repositories.CatalogoRepository;
 import com.microsservice.Catalogo.utility.CatalogoConverter;
 
 import jakarta.validation.ValidationException;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class CatalogoService {
 
 	@Autowired
 	private CatalogoRepository catalogoRepository;
-	
-    private static final Logger logger = LoggerFactory.getLogger(CatalogoRepository.class);
-    
     
     public CatalogoModel savedProduct(CatalogoModel catalogoModel) throws UnsupportedEncodingException {
   
     	try {
-			logger.info("Tentando montar Produto {}", catalogoModel.getName());
-			
+
+			log.info("Tentando montar Produto {}", catalogoModel.getName());
 			new CatalogoModelValidator().validationModel(catalogoModel);
-				
-			CatalogoDTO catalogoDTO = CatalogoConverter.convertToDTO(catalogoModel);
 	 			
         } catch (ValidationException e) {
-            logger.error("Erro de validação: {}", e.getMessage());
+            log.error("Erro de validação: {}", e.getMessage());
             throw e;
             
 		} catch (Exception e) {
-			logger.info("Erro ao criar Produto! {}", e.getMessage());
+			log.error("Erro ao criar Produto! {}", e.getMessage());
 			throw e;
 		}
     	
-    	logger.info("Produto Criado! {" + catalogoModel.getId() + "}");
-		return catalogoRepository.save(catalogoModel);	
+    	log.info("Produto Criado! {" + catalogoModel.getName() + "}");
+		return catalogoRepository.save(catalogoModel);
 	}
     
     public List<CatalogoDTO> getAllProducts() {
     	try {
-    		logger.info("Buscando Produtos!"); 
+    		log.info("Buscando Produtos!"); 
     		
     		List<CatalogoModel> catalogoModels = catalogoRepository.findAll();
     		
     		if (catalogoModels.isEmpty()) {
-                logger.warn("Nenhum produto encontrado no catálogo.");
+                log.warn("Nenhum produto encontrado no catálogo.");
                 throw new NoProductsFoundException("Nenhum produto encontrado.");
 			}
     		
@@ -67,30 +62,41 @@ public class CatalogoService {
     				.collect(Collectors.toList());
     		
         } catch (NoProductsFoundException ex) {
-            logger.error("Erro ao buscar produtos: {}", ex.getMessage());
+            log.error("Erro ao buscar produtos: {}", ex.getMessage());
             throw ex;
 
         } catch (Exception ex) {
-            logger.error("Erro inesperado ao buscar produtos: {}", ex.getMessage(), ex);
+            log.error("Erro inesperado ao buscar produtos: {}", ex.getMessage(), ex);
             throw new RuntimeException("Erro ao buscar produtos. Tente novamente mais tarde.", ex);
         }
     }
     
     public List<CatalogoModel> searchProduct(String name, Double price) {	
     	try {
-    		return catalogoRepository.findByFilters(name, price);	
-        } catch (DataAccessException e) {
-            logger.error("Erro ao consultar o catálogo no banco de dados: ", e);
-            throw new RuntimeException("Erro ao consultar o catálogo. Tente novamente mais tarde.", e);
+    		
+    		List<CatalogoModel> result = catalogoRepository.findByFilters(name, price);
+    		
+            if (result.isEmpty()) {
+            	log.warn("Nenhum produto encontrado");
+                throw new NoSuchElementException("Nenhum produto encontrado com: Name: " + name + ", Price: " + price);
+            }
+            
+            log.info("Produtos encontrados");
+            return result;
+
+        } catch (NoSuchElementException e) {
+            log.error("Erro ao consultar o catálogo no banco de dados: ", e);
+            throw e;
             
         } catch (Exception ex) {	
-            logger.error("Erro inesperado ao realizar a busca: ", ex.getMessage(), ex);
+            log.error("Erro inesperado ao realizar a busca: ", ex.getMessage(), ex);
             throw new RuntimeException("Erro ao realizar a busca. Tente novamente mais tarde.", ex);
         }
+    	
     }
     
     public void removeProduct(UUID id) {
-    	logger.info("Validando Produto! {" + id +"}");
+    	log.info("Validando Produto! {" + id +"}");
     	
     	try {
     		
@@ -101,10 +107,10 @@ public class CatalogoService {
             catalogoRepository.deleteById(id);
             
 		} catch (IllegalArgumentException e) {
-			logger.info("Erro ao remover Produto {}", e.getMessage());
+			log.info("Erro ao remover Produto {}", e.getMessage());
 			throw e;
 		}
-    	logger.info("Produto removido por ID! {" + id +"}");
+    	log.info("Produto removido por ID! {" + id +"}");
 
     }
 }
