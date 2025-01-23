@@ -43,7 +43,7 @@ public class CatalogoService {
             throw e;
             
 		} catch (Exception e) {
-			logger.info("Erro ao criar Produto! {}", e.getMessage());
+			logger.error("Erro ao criar Produto! {}", e.getMessage());
 			throw e;
 		}
     	
