@@ -103,8 +103,8 @@ http://<host>:<port>/catalogo
 ```json
 {
     "price": 19.99,
-    "status": "Available",
-    "discounted": "Yes",
+    "status": "sale",
+    "discounted": "discounted",
     "discount": 5.00,
     "name": "Sample Item",
     "description": "A sample catalog item.",

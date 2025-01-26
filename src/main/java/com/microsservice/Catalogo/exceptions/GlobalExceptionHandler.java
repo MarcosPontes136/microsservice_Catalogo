@@ -13,12 +13,12 @@ public class GlobalExceptionHandler {
 	
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<String> handleIllegalArgumentException(ValidationException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
     }
     
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Produto com o ID não encontrado.");
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Produto com o ID não encontrado.");
     }
     
     @ExceptionHandler(NoSuchElementException.class)
