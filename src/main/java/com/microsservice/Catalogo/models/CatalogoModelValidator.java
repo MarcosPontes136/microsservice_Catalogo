@@ -1,7 +1,10 @@
 package com.microsservice.Catalogo.models;
 
+import org.springframework.stereotype.Component;
+
 import jakarta.validation.ValidationException;
 
+@Component
 public class CatalogoModelValidator {
 	
 	private void validField(Object field, String fieldName) {
