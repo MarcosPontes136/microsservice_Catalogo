@@ -25,13 +25,16 @@ public class CatalogoService {
 
 	@Autowired
 	private CatalogoRepository catalogoRepository;
+	
+	@Autowired
+	private CatalogoModelValidator catalogoModelValidator;
     
     public CatalogoModel savedProduct(CatalogoModel catalogoModel) throws UnsupportedEncodingException {
   
     	try {
 
 			log.info("Tentando montar Produto {}", catalogoModel.getName());
-			new CatalogoModelValidator().validationModel(catalogoModel);
+			catalogoModelValidator.validationModel(catalogoModel);
 	 			
         } catch (ValidationException e) {
             log.error("Erro de validação: {}", e.getMessage());
