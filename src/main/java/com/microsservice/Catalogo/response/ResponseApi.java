@@ -1,12 +1,9 @@
 package com.microsservice.Catalogo.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+public record ResponseApi<T>(
+            String message,
+            T data,
+            boolean success
+) { }
 
-@Data
-@AllArgsConstructor
-public class ResponseApi<T> {
-   private String message;
-   private T data;
-   private boolean success;
-}
+

@@ -1,0 +1,62 @@
+@startuml
+scale 2
+left to right direction
+
+actor "Cliente" as cli
+
+cloud logTernico #yellow;line:Black;line.bold; [
+  Implementar log técnico em 
+  pontos estratégicos para 
+  identificação de erros e sucesso. 
+  Dados sensível usar mascara 
+]
+
+cloud aceiteEntrada #yellow;line:Black;line.bold; [
+  Regras: 
+  Não aceitar Vazio ou Nulo:
+]
+
+database Database {
+  json Tabela {
+   "teste1":"T1",
+   "teste2":"T2",
+   "teste3": ["T3", "T4"]
+  }
+}
+
+control Rarar_Processo
+process "Excessão" as exception
+
+package Solicitação {
+  process "Persistir dados" as processoDb
+
+  json JSON_Entrada {
+   "license_plate":"String",
+   "lat":"Double",
+   "lng":"Double",
+   "event_type":"String"
+  }
+
+  usecase "Validação identificou erro?" as validacaoRequest 
+  JSON_Entrada -> (validacaoRequest)
+  (validacaoRequest) - aceiteEntrada
+  validacaoRequest --> Rarar_Processo #line:red;line.bold;text:red : Identificação de falha
+  Rarar_Processo -> exception 
+  validacaoRequest --> processoDb #green;line.bold;text:green
+  processoDb ---> Database
+  Database -----> Rarar_Processo #line:red;line.bold;text:red : Identificação de falha
+}
+
+usecase "Sucesso" as Sucesso
+
+rectangle Microsservico {
+    cli ---> (Entrada)
+    Microsservico -- logTernico
+    Entrada ----> JSON_Entrada
+    exception -> (Retorno) #line:red;line.bold;text:red : Falha sendo retornada
+    Database --> Sucesso #green;line.bold;text:green : Identificação de Sucesso
+    Sucesso --> (Retorno) #green;line.bold;text:green
+    (Retorno) -> cli
+}
+
+@enduml

@@ -28,7 +28,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.microsservice.Catalogo.controller.CatalogoController;
 import com.microsservice.Catalogo.dto.CatalogoDTO;
-import com.microsservice.Catalogo.models.CatalogoModel;
+import com.microsservice.Catalogo.domain.model.CatalogoModel;
 import com.microsservice.Catalogo.response.ResponseApi;
 import com.microsservice.Catalogo.service.CatalogoService;
 

@@ -1,4 +1,4 @@
-package com.microsservice.Catalogo.models;
+package com.microsservice.Catalogo.domain.model;
 
 import org.springframework.stereotype.Component;
 

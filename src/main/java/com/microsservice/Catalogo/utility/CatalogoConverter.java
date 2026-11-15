@@ -1,7 +1,7 @@
 package com.microsservice.Catalogo.utility;
 
 import com.microsservice.Catalogo.dto.CatalogoDTO;
-import com.microsservice.Catalogo.models.CatalogoModel;
+import com.microsservice.Catalogo.domain.model.CatalogoModel;
 
 public class CatalogoConverter {
 	private CatalogoConverter() {

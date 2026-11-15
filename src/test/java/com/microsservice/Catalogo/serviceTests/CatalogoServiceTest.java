@@ -23,9 +23,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.microsservice.Catalogo.dto.CatalogoDTO;
-import com.microsservice.Catalogo.exceptions.NoProductsFoundException;
-import com.microsservice.Catalogo.models.CatalogoModel;
-import com.microsservice.Catalogo.models.CatalogoModelValidator;
+import com.microsservice.Catalogo.domain.model.CatalogoModel;
+import com.microsservice.Catalogo.domain.model.CatalogoModelValidator;
 import com.microsservice.Catalogo.repositories.CatalogoRepository;
 import com.microsservice.Catalogo.service.CatalogoService;
 
